@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/general.html :: header(${title})">
+</head>
+
+<body>
+  <div th:insert="fragments/general.html :: menuBar">
+  </div>
+  <h2 class="text-center mb-4">Manage Users Panel</h2>
+
+  <div class="container">
+
+    <div th:insert="fragments/general.html :: responseMessage"></div>
+    
+    <div class="row mb-3">
+      <div class="col-md-6 d-flex align-items-center">
+        <!-- Search Form -->
+        <form th:action="@{${baseUrl + currentPage}}" method="get" class="d-flex">
+          <input type="text" name="sortField" th:value="${sortField}" hidden>
+          <input type="text" name="sortDir" th:value="${sortDir}" hidden>
+
+          <div class="input-group">
+            <label for="searchBox" class="form-label me-2">Filter:</label>
+            <input type="search" class="form-control custom-search-box" name="keyword" id="searchBox" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm ms-2">Search</button>
+          <button type="reset" class="btn btn-secondary btn-sm ms-2">Clear</button>
+        </form>
+      </div>
+      <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <!-- Action Buttons -->
+        <a th:href="@{/users/new}" class="btn btn-primary btn-sm me-2">New User</a>
+        <a th:href="@{/users/export/csv}" class="btn btn-warning btn-sm me-2">Export CSV</a>
+        <a th:href="@{/users/export/excel}" class="btn btn-info btn-sm me-2">Export Excel</a>
+        <a th:href="@{/users/export/pdf}" class="btn btn-danger btn-sm">Export PDF</a>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="table-primary">
+            <tr>
+              <th th:replace="~{fragments/general.html :: column_link('id')}"></th>
+              <th scope="col">Image</th>
+              <th th:replace="~{fragments/general.html :: column_link('firstName')}"></th>
+              <th th:replace="~{fragments/general.html :: column_link('lastName')}"></th>
+              <th th:replace="~{fragments/general.html :: column_link('email')}"></th>
+              <th scope="col">Roles</th>
+              <th th:replace="~{fragments/general.html :: column_link('enabled')}"></th>
+              <th scope="col" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${users}">
+              <th scope="row" th:text="${user.id}"></th>
+              <td scope="row">
+                <img th:src="@{${user.getUserImagePath}}" alt="User Photo" class="img-fluid img-thumbnail"
+                  style="max-width: 70px; max-height: 70px;">
+              </td>
+              <td scope="row" th:text="${user.firstName}"></td>
+              <td scope="row" th:text="${user.lastName}"></td>
+              <td scope="row" th:text="${user.email}"></td>
+              <th scope="row">
+                <div th:each="role : ${user.roles}">
+                  <span th:text="${role.name}"></span>
+                </div>
+              </th>
+              <th scope="row" class="text-center">
+                <a class="fas text-decoration-none"
+                  th:href="@{/users/update/status(enabled=${user.enabled}, id=${user.id})}"
+                  th:classappend="${user.enabled} ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></a>
+              </th>
+              <th scope="row" class="text-center">
+                <a th:href="@{/users/edit(id=${user.id})}" class="btn btn-primary btn-sm">Edit</a>
+                <a th:href="@{/users/delete(id=${user.id})}" class="btn btn-danger btn-sm"
+                  th:attr="data-user-name=${user.firstName}+' '+${user.lastName}, data-user-id=${user.id}"
+                  data-bs-toggle="modal" data-bs-target="#modal">Delete</a>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="fragments/general.html :: paginationInfo(${totalUsers})"></div>
+  <div th:insert="fragments/general.html :: paginationBar"></div>
+  <div th:insert="fragments/general.html :: deleteModal"></div>
+  <div th:insert="fragments/general.html :: footer"></div>
+  <script th:src="@{/js/users/user_index.js}"></script>
+</body>
+
+</html>

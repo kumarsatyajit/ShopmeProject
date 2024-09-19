@@ -1,0 +1,50 @@
+#imagePreview {
+  max-height: 150px;
+  max-width: 150px;
+}
+
+.custom-search-box {
+  width: 500px;
+  /* Adjust the width as needed */
+}
+
+.custom-category-image-dimesion {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.category-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Style for the image */
+.brand-logo {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.brand-logo-preview {
+  max-height: 100px;
+}
+
+.brand-category-dropdown {
+  resize: vertical;
+  height: 200px;
+}
+
+.product-main-image {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+#alias::placeholder {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.no-border {
+  border: none;
+  background: none;
+  outline: none;
+}

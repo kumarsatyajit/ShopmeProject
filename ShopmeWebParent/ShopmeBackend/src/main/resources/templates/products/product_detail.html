@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="modal-header">
+    <h5 class="modal-title">Product Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+
+  <div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button"
+          role="tab">Overview</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button"
+          role="tab">Description</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button"
+          role="tab">Images</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button"
+          role="tab">Details</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button"
+          role="tab">Shipping</button>
+      </li>
+    </ul>
+
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+      <div class="tab-pane active" id="overview" role="tabpanel" tabindex="0">
+        <!-- product overview -->
+
+        <!-- product name -->
+        <div class="row my-3">
+          <label for="name" class="col-form-label col-sm-2 fw-semibold">Product
+            Name</label>
+          <div class="col-sm-8">
+            <input class="form-control" id="name" th:value="${product.name}" readonly>
+          </div>
+        </div>
+
+        <!-- prodcut alias -->
+        <div class="row my-3">
+          <label for="alias" class="col-form-label col-sm-2 fw-semibold">Alias</label>
+          <div class="col-sm-8">
+            <input class="form-control" id="alias" th:value="${product.alias}" readonly>
+          </div>
+        </div>
+
+        <!-- product brand -->
+        <div class="row my-3">
+          <label for="brand" class="col-form-label col-sm-2 fw-semibold">Brand</label>
+          <div class="col-sm-8">
+            <input class="form-control" id="brand" th:value="${product.brand.name}" readonly>
+          </div>
+        </div>
+
+        <!-- product category -->
+        <div class="row my-3">
+          <label for="category" class="col-form-label col-sm-2 fw-semibold">Category</label>
+          <div class="col-sm-8">
+            <input class="form-control" id="category" th:value="${product.category.name}" readonly>
+          </div>
+        </div>
+
+        <!-- product enabled checkbox -->
+        <div class="mb-3 row">
+          <div class="col-sm-2 fw-semibold">Enabled</div>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="enabled" th:checked="${product.enabled}"
+                onclick="return false">
+            </div>
+          </div>
+        </div>
+
+        <!-- product inStock checkbox -->
+        <div class="mb-3 row">
+          <div class="col-sm-2 fw-semibold">In Stock</div>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="inStock" th:checked="${product.inStock}"
+                onclick="return false">
+            </div>
+          </div>
+        </div>
+
+        <!-- product cost field -->
+        <div class="row my-3">
+          <label for="cost" class="col-form-label col-sm-2 fw-semibold">Cost</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="cost" th:value="${product.cost}" readonly>
+          </div>
+        </div>
+
+        <!-- product price field -->
+        <div class="row my-3">
+          <label for="price" class="col-form-label col-sm-2 fw-semibold">Price</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="price" th:value="${product.price}" readonly>
+          </div>
+        </div>
+
+        <!-- product discount field -->
+        <div class="row my-3">
+          <label for="discount" class="col-form-label col-sm-2 fw-semibold">Discount</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="discount" th:value="${product.discountPercent}" readonly>
+          </div>
+        </div>
+
+        <!-- product updated time -->
+        <div class="row my-3">
+          <label for="updatedTime" class="col-form-label col-sm-2 fw-semibold">Updated Time</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="updatedTime" th:value="${product.updatedTime}" readonly>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane" id="description" role="tabpanel" tabindex="0">
+        <!-- product description -->
+        <div class="row mb-3 py-2">
+          <label class="fw-semibold mb-2">Short Description:</label>
+          <div class="form-control" th:utext="${product.shortDescription}">
+          </div>
+        </div>
+
+        <div class="row mb-3 py-2">
+          <label class="fw-semibold mb-2">Full Description:</label>
+          <div class="form-control" th:utext="${product.fullDescription}">
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="tab-pane" id="images" role="tabpanel" tabindex="2">
+        <!-- product images -->
+        <!-- main image -->
+        <div class="row row-cols-4 g-3 pt-3"> <!-- Use Bootstrap's grid gap (g-3) -->
+          <div class="col-4 border p-2 position-relative">
+            <div>
+              <div><label class="fs-6 fw-semibold">Main Image</label></div>
+              <img th:src="@{${product.productMainImage}}" alt="product default image" class="img-fluid img-thumbnail">
+            </div>
+          </div>
+
+          <!-- extra images -->
+          <th:block th:each="extraImage, iterStat : ${product.extraImages}">
+            <div class="col-4 border p-2 position-relative">
+              <div><label class="fs-6 fw-semibold" th:text="'Extra Image #' + (${iterStat.index} + 1)"></label></div>
+              <img th:src="@{${extraImage.image}}" alt="product default image" class="img-fluid img-thumbnail">
+            </div>
+          </th:block>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="details" role="tabpanel" tabindex="3">
+        <!-- product details -->
+        <th:block th:each="productDetail : ${product.details}">
+          <div class="row my-3">
+            <label class="col-form-label col-sm-1 text-center fw-semibold">Name</label>
+            <div class="col-sm-4">
+              <input class="form-control" th:value="${productDetail.name}" readonly>
+            </div>
+            <label class="col-form-label col-sm-1 text-center fw-semibold">Value</label>
+            <div class="col-sm-4">
+              <input class="form-control" th:value="${productDetail.value}" readonly>
+            </div>
+          </div>
+        </th:block>
+
+      </div>
+
+      <div class="tab-pane" id="shipping" role="tabpanel" tabindex="4">
+        <!-- product shipping -->
+        <p class="fw-semibold my-3">The following information is important to calculate shipping cost for the product.
+          <br>
+          The dimensions (L X W X H) is for the box that is used to package the product - not the product dimesions.
+        </p>
+        <div class="row my-3">
+          <label for="length" class="col-form-label col-sm-2" style="font-size: 20px;">Length (inch)</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="length" th:value="${product.length}" readonly>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <label for="width" class="col-form-label col-sm-2" style="font-size: 20px;">Width (inch)</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="width" th:value="${product.width}" readonly>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <label for="height" class="col-form-label col-sm-2" style="font-size: 20px;">Height (inch)</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="height" th:value="${product.height}" readonly>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <label for="weight" class="col-form-label col-sm-2" style="font-size: 20px;">Weight (inch)</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="weight" th:value="${product.weight}" readonly>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+  </div>
+</body>
+
+</html>

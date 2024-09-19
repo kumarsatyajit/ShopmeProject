@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product</title>
+</head>
+
+<body>
+
+  <div th:fragment="product_overview" remove="tag">
+
+    <!-- product name -->
+    <div class="row my-3">
+      <label for="name" class="col-form-label col-sm-2">Product
+        Name</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="name" th:field="*{name}" required maxlength="256">
+      </div>
+    </div>
+
+    <!-- prodcut alias -->
+    <div class="row my-3">
+      <label for="alias" class="col-form-label col-sm-2">Alias</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="alias" th:field="*{alias}" maxlength="256"
+          placeholder="Default is product name (spaces are replaced by dashes)">
+      </div>
+    </div>
+
+    <!-- product brand -->
+    <div class="row my-3">
+      <label for="brand" class="col-form-label col-sm-2">Brand</label>
+      <div class="col-sm-8">
+        <select class="form-control" th:field="*{brandId}" id="brand">
+          <option value="">[No Brand]</option>
+          <th:block th:each="brand : ${brands}">
+            <option th:value="${brand.id}" th:text="${brand.name}"></option>
+          </th:block>
+        </select>
+      </div>
+    </div>
+
+    <!-- product category -->
+    <div class="row my-3">
+      <label for="category" class="col-form-label col-sm-2">Category</label>
+      <div class="col-sm-8">
+        <select class="form-control" th:field="*{categoryId}" id="categories"
+          th:attr="data-selected-category=${productDto.categoryId}">
+          <option value="">[No Category]</option>
+          <!-- get associated categories by Ajax call -->
+        </select>
+      </div>
+    </div>
+
+    <!-- product enabled checkbox -->
+    <div class="mb-3 row">
+      <div class="col-sm-2">Enabled</div>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="enabled" th:field="*{enabled}"> <label
+            class="form-check-label" for="enabled"> Check if Enabled </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- product inStock checkbox -->
+    <div class="mb-3 row">
+      <div class="col-sm-2">In Stock</div>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="inStock" th:field="*{inStock}"> <label
+            class="form-check-label" for="enabled"> Check if In Stock </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- product cost field -->
+    <div class="row my-3">
+      <label for="cost" class="col-form-label col-sm-2">Cost</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="cost" th:field="*{cost}" required>
+      </div>
+    </div>
+
+    <!-- product price field -->
+    <div class="row my-3">
+      <label for="price" class="col-form-label col-sm-2">Price</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="price" th:field="*{price}" required>
+      </div>
+    </div>
+
+    <!-- product discount field -->
+    <div class="row my-3">
+      <label for="discount" class="col-form-label col-sm-2">Discount</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="discount" th:field="*{discountPercent}">
+      </div>
+    </div>
+
+  </div>
+
+  <div th:fragment="product_description" remove="tag">
+
+    <div class="row my-3">
+      <label for="shortDescription" class="col-form-label col-sm-2 fw-semibold">Short
+        Description:</label>
+      <div class="col-sm-8">
+        <textarea id="shortDescription" class="form-control" th:field="*{shortDescription}"
+          th:text="${productDto.shortDescription}"></textarea>
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <label for="fullDescription" class="col-form-label col-sm-2 fw-semibold">Full
+        Description:</label>
+      <div class="col-sm-8">
+        <textarea id="fullDescription" class="form-control" th:field="*{fullDescription}"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div th:fragment="product_shipping" remove="tag">
+    <p class="fw-semibold my-3">The following information is important to calculate shipping cost for the product.
+      <br>
+      The dimensions (L X W X H) is for the box that is used to package the product - not the product dimesions.
+    </p>
+    <div class="row my-3">
+      <label for="length" class="col-form-label col-sm-2" style="font-size: 20px;">Length (inch)</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="length" th:field="*{length}">
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <label for="width" class="col-form-label col-sm-2" style="font-size: 20px;">Width (inch)</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="width" th:field="*{width}">
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <label for="height" class="col-form-label col-sm-2" style="font-size: 20px;">Height (inch)</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="height" th:field="*{height}">
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <label for="weight" class="col-form-label col-sm-2" style="font-size: 20px;">Weight (inch)</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="weight" th:field="*{weight}">
+      </div>
+    </div>
+  </div>
+
+  <div th:fragment="product_details" remove="tag">
+    <div id="details-container" class="mb-3">
+      <th:block th:each="productDetail : ${productDetails}" th:if="${productDto != null}">
+        <div class="row my-3">
+          <!-- hidden product details data -->
+          <input type="hidden" name="detailsIds" th:value="${productDetail.id}">
+          <input type="hidden" name="detailsNames" th:value="${productDetail.name}">
+          <input type="hidden" name="detailsValues" th:value="${productDetail.value}">
+
+          <label class="col-form-label col-sm-1 text-center fw-semibold">Name</label>
+          <div class="col-sm-4">
+            <input type="text" name="detailNames" class="form-control" th:value="${productDetail.name}" required>
+          </div>
+          <label class="col-form-label col-sm-1 text-center fw-semibold">Value</label>
+          <div class="col-sm-4">
+            <input type="text" name="detailValues" class="form-control" th:value="${productDetail.value}" required>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="fas fa-times-circle fa-2x no-border" onclick="removeDetail(this)"></button>
+          </div>
+        </div>
+      </th:block>
+    </div>
+    <button type="button" class="btn btn-primary" id="addDetailsBtn" onclick="addDetailsField()">Add More
+      Details</button>
+  </div>
+
+  <div th:fragment="product_images" remove="tag">
+    <div class="row row-cols-6" id="imageContainer">
+
+      <th:block th:if="${productDto.id != null}">
+        <!-- main image -->
+        <div class="col border m-3 p-2 position-relative">
+          <div>
+            <div><label class="fs-6 fw-semibold">Main Image</label></div>
+            <img th:src="@{${productDto.mainImage}}" alt="product default image" class="img-fluid img-thumbnail"
+              id="mainImagePreview" th:attr="data-default-image-url=@{${defaultImage}}">
+            <input type="file" name="image" id="mainImage" class="form-control mt-2"
+              onchange="setupImageUpload('mainImage','mainImagePreview',1)">
+          </div>
+        </div>
+
+        <!-- extra images -->
+        <th:block th:each="extraImage, iterStat : ${extraImages}">
+          <div class="col border m-3 p-2 position-relative">
+            <button type="button" class="fas fa-times-circle no-border position-absolute top-0 end-0 p-1"
+              aria-label="Close" onclick="removeImageField(this)">
+            </button>
+            <div>
+              <!-- hidden extra image data -->
+              <input type="hidden" name="imageIds" th:value="${extraImage.id}">
+              <input type="hidden" name="imageNames" th:value="${extraImage.name}">
+
+              <div><label class="fs-6 fw-semibold" th:text="'Extra Image #' + (${iterStat.index} + 1)"></label></div>
+              <img th:src="@{${extraImage.image}}" alt="product default image" class="img-fluid img-thumbnail">
+              <input type="file" name="images" class="form-control mt-2">
+            </div>
+          </div>
+        </th:block>
+
+        <div class="col border m-3 p-2 position-relative">
+          <button type="button" class="fas fa-times-circle no-border position-absolute top-0 end-0 p-1"
+            aria-label="Close" onclick="removeImageField(this)">
+          </button>
+          <div>
+            <div><label class="fs-6 fw-semibold">Extra Image #[[${totalExtraImages+1}]]</label></div>
+            <img th:src="@{${defaultImage}}" alt="product default image" class="img-fluid img-thumbnail">
+            <input type="file" name="images" class="form-control mt-2"
+              th:attr="data-number=${totalExtraImages+1}, data-default-image-url=@{${defaultImage}}"
+              onchange="addExtraImageField(this)">
+          </div>
+        </div>
+
+
+      </th:block>
+
+      <th:block th:unless="${productDto.id != null}">
+        <!-- main image -->
+        <div class="col border m-3 p-2 position-relative">
+          <div>
+            <div><label class="fs-6 fw-semibold">Main Image</label></div>
+            <img th:src="@{${defaultImage}}" alt="product default image" class="img-fluid img-thumbnail"
+              id="mainImagePreview" th:attr="data-default-image-url=@{${defaultImage}}">
+            <input type="file" name="image" id="mainImage" class="form-control mt-2"
+              onchange="setupImageUpload('mainImage','mainImagePreview',1)" required>
+          </div>
+        </div>
+
+        <!-- extra images -->
+        <div class="col border m-3 p-2 position-relative">
+          <button type="button" class="fas fa-times-circle no-border position-absolute top-0 end-0 p-1"
+            aria-label="Close" onclick="removeImageField(this)">
+          </button>
+          <div>
+            <div><label class="fs-6 fw-semibold">Extra Image #1</label></div>
+            <img th:src="@{${defaultImage}}" alt="product default image" class="img-fluid img-thumbnail">
+            <input type="file" name="images" class="form-control mt-2"
+              th:attr="data-number=${currentExtraImageCount}, data-default-image-url=@{${defaultImage}}"
+              onchange="addExtraImageField(this)">
+          </div>
+        </div>
+      </th:block>
+
+
+    </div>
+  </div>
+  
+</body>
+
+</html>

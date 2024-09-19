@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/general.html :: header(${title})">
+</head>
+
+<body>
+  <div th:insert="fragments/general.html :: menuBar"></div>
+
+  <h2 class="text-center mb-3">Manage Brands</h2>
+
+  <div th:insert="~{fragments/general.html :: responseMessage}"></div>
+
+  <div class="container">
+    <div class="row mb-3">
+
+      <div class="col-md-6 d-flex align-items-center">
+        <!-- Search Form -->
+        <form th:action="@{${baseUrl + currentPage}}" method="get" class="d-flex">
+          <input type="text" name="sortField" th:value="${sortField}" hidden>
+          <input type="text" name="sortDir" th:value="${sortDir}" hidden>
+
+          <div class="input-group">
+            <label for="searchBox" class="form-label me-2">Filter:</label>
+            <input type="search" class="form-control custom-search-box" name="keyword" id="searchBox" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm ms-2">Search</button>
+          <button type="reset" class="btn btn-secondary btn-sm ms-2">Clear</button>
+        </form>
+      </div>
+
+      <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <a th:href="@{/brands/new}" class="btn btn-primary btn-sm" role="button">New Brand</a>
+        <a th:href="@{/brands/export/csv}" class="btn btn-warning btn-sm ms-1" role="button">Export CSV</a>
+        <a th:href="@{/brands/export/excel}" class="btn btn-info btn-sm ms-1" role="button">Export Excel</a>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="table-primary">
+            <tr>
+              <th th:replace="~{fragments/general.html :: column_link('id')}"></th>
+              <th scope="col" class="text-center">Logo</th>
+              <th th:replace="~{fragments/general.html :: column_link('name')}"></th>
+              <th scope="col">Categories</th>
+              <th scope="col" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="brand : ${brands}">
+              <th scope="row" th:text="${brand.id}" class="text-center"></th>
+              <td class="text-center">
+                <img th:src="@{${brand.brandlogo}}" alt="Brand logo" class="img-fluid img-thumbnail brand-logo">
+              </td>
+              <td>
+                <b th:text="${brand.name}"></b>
+              </td>
+              <td class="col-sm-5">
+                <span th:each="category : ${brand.categories}" th:text="${category.name}"
+                  class="badge text-bg-info ms-1"></span>
+              </td>
+              <td class="text-center">
+                <a th:href="@{/brands/edit(id=${brand.id})}" class="btn btn-primary btn-sm">Edit</a>
+                <a th:href="@{/brands/delete(id=${brand.id})}" class="btn btn-danger btn-sm"
+                  th:attr="data-brand-name=${brand.name}, data-brand-id=${brand.id}" data-bs-toggle="modal"
+                  data-bs-target="#modal">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="fragments/general.html :: paginationInfo(${totalBrands})"></div>
+  <div th:insert="fragments/general.html :: paginationBar"></div>
+  <div th:insert="~{fragments/general.html :: deleteModal}"></div>
+  <div th:insert="~{fragments/general.html :: footer}"></div>
+  <script th:src="@{/js/brands/brand_index.js}"></script>
+</body>
+
+</html>

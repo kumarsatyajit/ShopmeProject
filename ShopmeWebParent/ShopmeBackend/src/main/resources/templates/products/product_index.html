@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/general.html :: header(${title})}">
+</head>
+
+<body>
+  <div th:insert="~{fragments/general.html :: menuBar}">
+  </div>
+  <h2 class="text-center mb-3">Manage Products</h2>
+
+  <div th:insert="~{fragments/general.html :: responseMessage}"></div>
+
+  <div class="container">
+
+    <div class="row mb-3">
+      <div class="col-md-6 d-flex align-items-center">
+        <!-- Search Form -->
+        <form th:action="@{${baseUrl + currentPage}}" method="get" class="d-flex">
+          <input type="text" name="sortField" th:value="${sortField}" hidden>
+          <input type="text" name="sortDir" th:value="${sortDir}" hidden>
+
+          <div class="input-group">
+            <label for="searchBox" class="form-label me-2">Filter:</label>
+            <input type="search" class="form-control custom-search-box" name="keyword" id="searchBox" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm ms-2">Search</button>
+          <button type="reset" class="btn btn-secondary btn-sm ms-2">Clear</button>
+        </form>
+      </div>
+
+      <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <a th:href="@{/products/new}" class="btn btn-primary btn-sm me-2" role="button">Add Product</a>
+        <a th:href="@{/products/export/csv}" class="btn btn-warning btn-sm me-2" role="button">Export CSV</a>
+        <a th:href="@{/products/export/excel}" class="btn btn-info btn-sm" role="button">Export Excel</a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="table-primary">
+            <tr>
+              <th th:replace="~{fragments/general.html :: column_link('id')}"></th>
+              <th scope="col" class="text-center">Image</th>
+              <th th:replace="~{fragments/general.html :: column_link('name')}"></th>
+              <th th:replace="~{fragments/general.html :: column_link('brand')}"></th>
+              <th th:replace="~{fragments/general.html :: column_link('category')}"></th>
+              <th scope="col" class="text-center">Enabled</th>
+              <th scope="col" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="product : ${products}">
+              <th scope="row" th:text="${product.id}" class="col-1"></th>
+              <td class="col">
+                <img th:src="@{${product.productMainImage}}" alt="Product Image"
+                  class="img-fluid img-thumbnail product-main-image">
+              </td>
+              <td>
+                <a id="productName" th:href="@{/products/details(id=${product.id})}" th:text="${product.name}"
+                  class="col-6 fw-semibold text-dark text-decoration-none link-details"></a>
+              </td>
+              <td th:text="${product.brand.name}" class="col-1 fw-semibold"></td>
+              <td th:text="${product.category.name}" class="col-1 fw-semibold"></td>
+              <td class="text-center col">
+                <a th:href="@{/products/update/enabled/status(id=${product.id}, enabled=${product.enabled})}"
+                  class="text-decoration-none"
+                  th:classappend="${product.enabled} ? 'fas fa-check-circle text-success' : 'fas fa-times-circle text-danger'"></a>
+              </td>
+              <td class="text-center col-2">
+                <a th:href="@{/products/details(id=${product.id})}"
+                  class="link-details fas fa-file-alt fa-2x text-success ms-1" data-bs-toggle="tooltip"
+                  title="Details"></a>
+                <a th:href="@{/products/edit(id=${product.id})}" class="fas fa-edit fa-2x text-primary ms-1"
+                  data-bs-toggle="tooltip" title="Edit"></a>
+                <a th:href="@{/products/delete(id=${product.id})}" class="fas fa-trash-alt fa-2x text-danger ms-1"
+                  data-bs-toggle="modal" data-bs-target="#modal" title="Delete"
+                  th:attr="data-product-name=${product.name}, data-product-id=${product.id}"></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="detailModal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content px-3">
+
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="~{fragments/general.html :: paginationInfo(${totalEntities})}"></div>
+  <div th:insert="~{fragments/general.html :: paginationBar}"></div>
+  <div th:insert="~{fragments/general.html :: deleteModal}"></div>
+  <div th:insert="~{fragments/general.html :: footer}"></div>
+  <script th:src="@{/js/products/product_index.js}"></script>
+</body>
+
+</html>

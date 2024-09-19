@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="header(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/select2/4.0.13/css/select2.min.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title th:text="${title}"></title>
+</head>
+
+<body>
+
+  <div th:fragment="footer">
+    <p class="text-center">Shopme Control Panel - Copyright &copy; Shopme</p>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    <!-- <script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script> -->
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <!-- <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script> -->
+    <script th:src="@{/webjars/select2/4.0.13/js/select2.min.js}"></script>
+    <script th:src="@{/webjars/tinymce/5.0.9/tinymce.min.js}"></script>
+    <script type="module">
+      window.isEmailUniqueUrl = "[[@{/users/check_email_uniqueness}]]";
+      window.isEmailNewUrl = "[[@{/users/check_email_new}]]";
+      window.defaultImage = "[[@{${defaultImage}}]]";
+      window.isNameUnique = "[[@{/categories/check_name}]]";
+      window.isAliasUnique = "[[@{/categories/check_alias}]]";
+      window.isNameAssociatedWithId = "[[@{/categories/check_edit_name}]]";
+      window.isAliasAssociatedWithId = "[[@{/categories/check_edit_alias}]]";
+      window.isBrandNameUniqueUrl = "[[@{/brands/check_brand_name}]]";
+      window.isBrandNameAssociatedWithIdUrl = "[[@{/brands/check_edit_brand_name}]]";
+      window.selectedCategories = "[[${selectedCategories}]]";
+      window.getAssociatedCategoriesUrl = "[[@{/products/brand/associated/categories}]]";
+      window.isProductNameUniqueUrl = "[[@{/products/check_name_unique}]]";
+      window.isProductAliasUniqueUrl = "[[@{/products/check_alias_unique}]]";
+      window.isProductNameAssociatedWithIdUrl = "[[@{/products/edit_name_unique}]]";
+      window.isProductAliasAssociatedWithIdUrl = "[[@{/products/edit_alias_unique}]]";
+    </script>
+    <script>
+      $(document).ready(function () {
+        $("#logoutLink").on('click', function (event) {
+          event.preventDefault();
+          document.logoutForm.submit();
+        })
+      });
+
+      $(document).ready(function () {
+        $("#accountLink").on('dblclick', function (event) {
+          location.href = this.href;
+        })
+      })
+    </script>
+  </div>
+
+  <div th:fragment="menuBar">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit">
+      </form>
+
+      <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+          <img th:src="@{/images/ShopmeAdminSmall.png}" alt="Shopme logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+              <a class="nav-link" th:href="@{/users}">Users</a>
+            </li>
+
+            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/categories}">Categories</a>
+              </li>
+            </th:block>
+
+            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/brands}">Brands</a>
+              </li>
+            </th:block>
+
+            <th:block sec:authorize="hasAnyAuthority('Admin','Editor','Salesperson','Shipper')">
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/products}">Products</a>
+              </li>
+            </th:block>
+
+          </ul>
+          <ul class="navbar-nav mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+              <a class="nav-link fas fa-user fa-2x" href=""></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" th:href="@{/account}" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false" sec:authentication="principal.fullName" id="accountLink">
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" id="logoutLink" href="">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div th:fragment="modal">
+    <div class="modal" id="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalHead"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="modalBody"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:fragment="deleteModal">
+    <div class="modal" tabindex="-1" id="modal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalHead"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="modalBody"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a class="btn btn-danger" role="button" href="#" id="deleteBtn">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:fragment="responseMessage" class="alert p-2 alert-success text-center" role="alert" th:if="${message}"
+    id="success-message">
+    <span th:utext="${message}"></span>
+  </div>
+
+  <div th:fragment="paginationInfo(totalEntities)" class="d-flex justify-content-center">
+    <p th:if="${start > totalEntities}"><strong>No Result Found</strong></p>
+    <p th:unless="${start > totalEntities}">Showing [[${result}]] # <strong>[[${start}]]</strong> to
+      <strong>[[${end}]]</strong> of
+      <strong>[[${totalEntities}]]</strong>
+    </p>
+  </div>
+
+  <div th:fragment="paginationBar" class="d-flex justify-content-center">
+    <nav aria-label="Page navigation example" th:if="${size > 0}">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link"
+            th:href="@{${baseUrl+ '1'}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">First</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+          <a class="page-link"
+            th:href="@{${baseUrl + (currentPage - 1)}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">Previous</a>
+        </li>
+        <li class="page-item" th:if="${currentPage <= lastPage}">
+          <a class="page-link"
+            th:href="@{${baseUrl + currentPage}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">[[${currentPage}]]</a>
+        </li>
+        <li class="page-item" th:if="${currentPage+1 <= lastPage}">
+          <a class="page-link"
+            th:href="@{${baseUrl + (currentPage + 1)}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">[[${currentPage+1}]]</a>
+        </li>
+        <li class="page-item" th:if="${currentPage+2 <= lastPage}">
+          <a class="page-link"
+            th:href="@{${baseUrl + (currentPage + 2)}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">[[${currentPage+2}]]</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == lastPage} ? 'disabled'">
+          <a class="page-link"
+            th:href="@{${baseUrl + (currentPage + 1)}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link"
+            th:href="@{${baseUrl + lastPage}(sortField=${sortField}, sortDir=${sortDir},keyword=${keyword})}">Last</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <th scope="col" th:fragment="column_link(fieldName)">
+    <a th:if="${sortField != fieldName}"
+      th:href="@{${baseUrl+currentPage}(sortField=${fieldName},sortDir=${sortDir},keyword=${keyword})}"
+      class="text-dark text-decoration-none">
+      [[${fieldName}]]
+    </a>
+    <a th:if="${sortField == fieldName}"
+      th:href="@{${baseUrl+currentPage}(sortField=${fieldName},sortDir=${reverseDir},keyword=${keyword})}"
+      class="text-dark text-decoration-none">
+      [[${fieldName}]]
+    </a>
+    <i th:if="${sortField == fieldName}" th:classappend="${sortDir == 'asc'} ? 'bi bi-sort-up' : 'bi bi-sort-down'"></i>
+  </th>
+
+</body>
+
+</html>

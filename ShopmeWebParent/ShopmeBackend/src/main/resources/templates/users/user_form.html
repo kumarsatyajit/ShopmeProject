@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/general.html :: header(${title})">
+</head>
+
+<body>
+  <div th:insert="fragments/general.html :: menuBar">
+  </div>
+  <h2 class="text-center mb-3">Manage Users - [[${pageTitle}]]</h2>
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-sm-6">
+        <form th:action="@{/users/save}" method="post" th:object="${userDto}" onsubmit="return checkEmailUnique(this);"
+          enctype="multipart/form-data">
+          <!-- id -->
+          <div class="row mb-3" th:if="${userDto.id != null}">
+            <label for="id" class="col-form-label col-sm-2">ID</label>
+            <div class="col-sm-10">
+              <input id="id" type="text" class="form-control" th:field="*{id}" readonly>
+            </div>
+          </div>
+          <!-- first name -->
+          <div class="row mb-3">
+            <label for="firstName" class="col-form-label col-sm-2">First Name</label>
+            <div class="col-sm-10">
+              <input id="firstName" type="text" class="form-control" th:field="*{firstName}" required maxlength="45">
+            </div>
+          </div>
+          <!-- last name -->
+          <div class="row mb-3">
+            <label for="lastName" class="col-form-label col-sm-2">Last Name</label>
+            <div class="col-sm-10">
+              <input id="lastName" type="text" class="form-control" th:field="*{lastName}" required maxlength="45">
+            </div>
+          </div>
+          <!-- email -->
+          <div class="row mb-3">
+            <label for="email" class="col-form-label col-sm-2">Email</label>
+            <div class="col-sm-10">
+              <input id="email" type="email" class="form-control" th:field="*{email}" required maxlength="128">
+            </div>
+          </div>
+          <!-- password -->
+          <div class="row mb-3">
+            <label for="password" class="col-form-label col-sm-2">Password</label>
+            <div class="col-sm-10">
+              <input th:if="${userDto.id != null}" id="password" type="password" class="form-control"
+                th:field="*{password}" maxlength="64" placeholder="Enter new password">
+              <input th:unless="${userDto.id != null}" id="password" type="password" class="form-control"
+                th:field="*{password}" required maxlength="64">
+            </div>
+          </div>
+          <!-- show password checkbox -->
+          <div class="row mb-2">
+            <label for="showPassword" class="col-sm-auto">Show password</label>
+            <div class="col-sm-1">
+              <input type="checkbox" id="showPassword" class="form-check-input">
+            </div>
+          </div>
+          <!-- image -->
+          <div class="row mb-3">
+            <label for="image" class="col-form-label col-sm-2">Profile</label>
+            <div class="col-sm-5">
+              <input type="file" id="image" class="form-control form-control-sm" name="image">
+            </div>
+            <div class="col-sm-5">
+              <img th:src="@{${defaultImage}}" alt="Default Image Preview" id="imagePreview"
+                class="img-fluid img-thumbnail">
+            </div>
+          </div>
+          <!-- enabled -->
+          <div class="row mb-3">
+            <label for="enabled" class="form-check-label col-sm-2">Enabled</label>
+            <div class="col-sm-10">
+              <input class="form-check-input" type="checkbox" th:field="*{enabled}" id="enabled">
+            </div>
+          </div>
+          <!-- roles -->
+          <div class="row mb-3">
+            <label for="role" class="col-sm-2">Role</label>
+            <div class="col-sm-10">
+              <div th:each="role : ${allRoles}">
+                <input th:id="${role.name}" type="checkbox" class="form-check-input" th:value="${role.id}"
+                  th:field="*{roleIds}">
+                <label th:for="${role.name}" th:text="${role.name}"></label>
+                <label th:for="${role.name}">
+                  <small th:text="${role.description}"></small>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center mb-3">
+            <button class="btn btn-primary btn-sm ms-1" type="submit">Save</button>
+            <button class="btn btn-secondary btn-sm ms-1" type="reset">Reset</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="window.history.back();">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--  modal -->
+  <div th:insert="fragments/general.html :: modal"></div>
+  <div th:insert="fragments/general.html :: footer"></div>
+  <script th:src="@{/js/users/user_form.js}"></script>
+</body>
+
+</html>

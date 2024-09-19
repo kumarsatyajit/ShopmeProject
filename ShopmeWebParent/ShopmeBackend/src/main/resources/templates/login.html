@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/general.html :: header(${title})}">
+</head>
+
+<body>
+  <div class="container mb-4">
+    <div class="row justify-content-center">
+      <div class="col-sm-4">
+        <img th:src="@{/images/ShopmeAdminBig.png}" alt="Shopme store logo" class="img-fluid">
+        <form th:action="@{/login}" method="post">
+          <div th:if="${param.error}">
+            <p class="text-danger text-center">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+          </div>
+
+          <div th:if="${param.logout}">
+            <p class="text-warning text-center">You have been logged out.</p>
+          </div>
+
+          <h3 class="text-center">Access to Shopme Control Panel</h3>
+          <!-- Email input -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold" for="email">Email address</label>
+            <input type="email" id="email" class="form-control" name="email" />
+          </div>
+
+          <!-- Password input -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold" for="password">Password</label>
+            <input type="password" id="password" class="form-control" name="password" />
+          </div>
+
+          <!-- Show password checkbox -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="showPassword">Show Password</label>
+            <input type="checkbox" id="showPassword" class="form-check-input">
+          </div>
+
+          <!-- 2 column grid layout for inline styling -->
+          <div class="row mb-4">
+            <div class="col d-flex justify-content-center">
+              <!-- Checkbox -->
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="rememberMe" name="remember-me" checked />
+                <label class="form-check-label" for="rememberMe"> Remember me </label>
+              </div>
+            </div>
+
+            <div class="col">
+              <!-- Simple link -->
+              <a href="#!">Forgot password?</a>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Sign
+              in</button>
+          </div>
+
+          <!-- Register buttons -->
+          <div class="text-center">
+            <p>Not a member? <a href="#!">Register</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/general.html :: footer}">
+  </div>
+
+  <script>
+    document.querySelector('#showPassword').addEventListener('click', function (event) {
+      const checkbox = event.target;
+      const passwordField = document.getElementById('password');
+      if (checkbox.checked) {
+        passwordField.type = 'text';
+      } else {
+        passwordField.type = 'password';
+      }
+    });
+  </script>
+</body>
+
+</html>

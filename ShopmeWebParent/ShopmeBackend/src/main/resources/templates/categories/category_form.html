@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/general.html :: header(${title})">
+</head>
+
+<body>
+  <div th:insert="fragments/general.html :: menuBar">
+  </div>
+  <h2 class="text-center mb-3">Manage Categories - [[${pageTitle}]]</h2>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-5">
+        <form th:action="@{/categories/save}" method="post" th:object="${categoryDto}" enctype="multipart/form-data"
+          id="categoryForm">
+
+          <!-- ID Field -->
+          <div class="mb-3 row" th:if="${categoryDto.id != null}">
+            <label for="id" class="col-sm-2 col-form-label">ID</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="id" th:field="*{id}" readonly>
+            </div>
+          </div>
+
+          <!-- Name Field -->
+          <div class="mb-3 row">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter Category Name"
+                required maxlength="128">
+            </div>
+          </div>
+
+          <!-- Alias Field -->
+          <div class="mb-3 row">
+            <label for="alias" class="col-sm-2 col-form-label">Alias</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="alias" th:field="*{alias}" placeholder="Enter Alias" required
+                maxlength="64">
+            </div>
+          </div>
+
+          <!-- Parent dropdown -->
+          <div class="mb-3 row">
+            <label for="alias" class="col-sm-2 col-form-label">Parent</label>
+            <div class="col-sm-10">
+              <select class="form-select form-select-sm category-dropdown" th:field="*{parent}">
+                <option value="">[No Parent]</option>
+                <option th:each="name : ${names}" th:value="${name}" th:text="${name}"></option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Enabled Checkbox -->
+          <div class="mb-3 row">
+            <div class="col-sm-2">Enabled</div>
+            <div class="col-sm-10">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="enabled" th:field="*{enabled}">
+                <label class="form-check-label" for="enabled">
+                  Check if Enabled
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Input -->
+          <div class="mb-3 row">
+            <label for="image" class="col-sm-2 col-form-label">Image</label>
+            <div class="col-sm-10">
+              <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            </div>
+          </div>
+
+          <!-- Image Preview -->
+          <div class="mb-3 row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10">
+              <img id="categoryImagePreview" th:src="@{${defaultImage}}" alt="Image Preview"
+                class="img-fluid img-thumbnail">
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="mb-3 row">
+            <div class="col-sm-10 offset-sm-2 text-center">
+              <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              <button type="reset" class="btn btn-warning btn-sm" onclick="resetCategoryForm()">Reset</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.history.back();">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="~{fragments/general.html :: modal}"></div>
+  <div th:insert="~{fragments/general.html :: footer}"></div>
+  <script th:src="@{/js/categories/category_form.js}"></script>
+</body>
+
+</html>
